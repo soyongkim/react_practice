@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-
+import { signInUser } from './../../redux/User/user.actions'
 
 import './styles.scss';
 import Buttons from './../forms/Button';
 import { signInWithGoogle, auth } from './../../firebase/utils';
 
-
 import AuthWrapper from './../AuthWrapper';
 import FormInput from './../forms/FormInput';
 import Button from './../forms/Button';
 
-const initialState = {
-    email: '',
-    password: ''
-};
-
 
 const SignIn = props => {
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -26,18 +22,11 @@ const SignIn = props => {
         setPassword('');
     };
 
-    const handleSubmit = async e => {
+    const handleSubmit = e => {
         e.preventDefault();
-
-        try {
-
-            await auth.signInWithEmailAndPassword(email, password);
-            resetForm();
-            props.history.push('/');
-
-        } catch(err) {
-            // console.log(err);
-        }
+        dispatch(signInUser({ email, password }));
+        // resetForm();
+        // props.history.push('/');
 
     }
 
